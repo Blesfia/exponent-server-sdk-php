@@ -5,13 +5,6 @@ namespace ExponentPhpSDK\Repositories;
 class ExpoFileDriver
 {
     /**
-     * The file path for the file that will contain the registered tokens
-     *
-     * @var string
-     */
-    private $storage = __DIR__.'/../../storage/tokens.json';
-
-    /**
      * Stores an Expo token with a given identifier
      *
      * @param $key
@@ -21,35 +14,7 @@ class ExpoFileDriver
      */
     public function store($key, $value)
     {
-        $storageInstance = null;
-
-        try {
-            $storageInstance = $this->getRepository();
-        } catch (\Exception $e) {
-            // Create the file, if it does not exist..
-            $storageInstance = $this->createFile();
-        }
-
-        // Check for existing tokens
-        if (isset($storageInstance->{$key})) {
-            // If there is a single token, make it an array so we can push the additional tokens in it
-            if (!is_array($storageInstance->{$key})) {
-                $storageInstance->{$key} = [$storageInstance->{$key}];
-            }
-
-            // Prevent duplicates
-            if (!in_array($value, $storageInstance->{$key})) {
-                // Add new token to existing key
-                array_push($storageInstance->{$key}, $value);
-            }
-        } else {
-            // First token for this key
-            $storageInstance->{$key} = [$value];
-        }
-
-        $file = $this->updateRepository($storageInstance);
-
-        return (bool) $file;
+        return true;
     }
 
     /**
@@ -61,13 +26,7 @@ class ExpoFileDriver
      */
     public function retrieve(string $key)
     {
-        $token = null;
-
-        $storageInstance = $this->getRepository();
-
-        $token = $storageInstance->{$key};
-
-        return $token;
+        return null;
     }
 
     /**
@@ -80,46 +39,7 @@ class ExpoFileDriver
      */
     public function forget(string $key, string $value = null)
     {
-        $storageInstance = null;
-
-        try {
-            $storageInstance = $this->getRepository();
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        // Delete a single token with this key and check if there are multiple tokens associated with this key
-        if($value && isset($storageInstance->{$key}) && is_array($storageInstance->{$key}) && count($storageInstance->{$key}) > 1)
-        {
-            // Find our token in list of tokens
-            $index = array_search($value, $storageInstance->{$key});
-
-            if (isset($index) && isset($storageInstance->{$key}[$index])) {
-                // Remove single token from list
-                unset($storageInstance->{$key}[$index]);
-
-                if (count($storageInstance->{$key}) === 0) {
-                    // No more tokens left, remove key
-                    unset($storageInstance->{$key});
-                } else {
-                    // Reset array key after removing an key
-                    $storageInstance->{$key} = array_values($storageInstance->{$key});
-                }
-
-                $this->updateRepository($storageInstance);
-
-                return !in_array($value, $storageInstance->{$key});
-            }
-        } else {
-            // Delete all tokens with this key
-            unset($storageInstance->{$key});
-
-            $this->updateRepository($storageInstance);
-
-            return !isset($storageInstance->{$key});
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -131,12 +51,7 @@ class ExpoFileDriver
      */
     private function getRepository()
     {
-        if (!file_exists($this->storage)) {
-            throw new \Exception('Tokens storage file not found.');
-        }
-
-        $file = file_get_contents($this->storage);
-        return json_decode($file);
+        throw new \Exception('Tokens storage file not found.');
     }
 
     /**
@@ -148,8 +63,7 @@ class ExpoFileDriver
      */
     private function updateRepository($contents)
     {
-        $record = json_encode($contents);
-        return file_put_contents($this->storage, $record);
+        return true;
     }
 
     /**
@@ -159,9 +73,6 @@ class ExpoFileDriver
      */
     private function createFile()
     {
-        $file = fopen($this->storage, "w");
-        fputs($file, '{}');
-        fclose($file);
         return json_decode('{}');
     }
 
@@ -173,7 +84,6 @@ class ExpoFileDriver
      */
     public function setStorage(string $storage)
     {
-        $this->storage = $storage;
         return $this;
     }
 }
