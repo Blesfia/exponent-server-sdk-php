@@ -78,7 +78,7 @@ class ExpoFileDriver
      *
      * @return bool
      */
-    public function forget(string $key, string $value = null): bool
+    public function forget(string $key, string $value = null)
     {
         $storageInstance = null;
 
