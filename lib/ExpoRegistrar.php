@@ -75,7 +75,7 @@ class ExpoRegistrar
      *
      * @return array
      */
-    public function getInterests(array $interests)
+    public function getInterests($interests)
     {
         $tokens = [];
 
