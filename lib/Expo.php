@@ -170,7 +170,10 @@ class Expo
     public function getCurl()
     {
         // Create or reuse existing cURL handle
-        $this->ch = $this->ch ?? curl_init();
+        if ($this->ch) {
+            return $this->ch;
+        }
+        $this->ch = curl_init();
 
         // Throw exception if the cURL handle failed
         if (!$this->ch) {
