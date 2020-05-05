@@ -4,6 +4,8 @@ namespace ExponentPhpSDK\Repositories;
 
 class ExpoFileDriver
 {
+    private $storage = array();
+
     /**
      * Stores an Expo token with a given identifier
      *
@@ -14,6 +16,7 @@ class ExpoFileDriver
      */
     public function store($key, $value)
     {
+        $storage[$key] = $value;
         return true;
     }
 
@@ -26,7 +29,7 @@ class ExpoFileDriver
      */
     public function retrieve(string $key)
     {
-        return null;
+        return $storage[$key];
     }
 
     /**
@@ -39,6 +42,7 @@ class ExpoFileDriver
      */
     public function forget(string $key, string $value = null)
     {
+        $storage[$key] = $value;
         return true;
     }
 
