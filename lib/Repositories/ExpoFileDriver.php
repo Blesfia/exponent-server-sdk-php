@@ -2,9 +2,7 @@
 
 namespace ExponentPhpSDK\Repositories;
 
-use ExponentPhpSDK\ExpoRepository;
-
-class ExpoFileDriver implements ExpoRepository
+class ExpoFileDriver
 {
     /**
      * The file path for the file that will contain the registered tokens
