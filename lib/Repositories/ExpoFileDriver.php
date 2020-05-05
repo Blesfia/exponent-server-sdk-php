@@ -16,7 +16,7 @@ class ExpoFileDriver
      */
     public function store($key, $value)
     {
-        $storage[$key] = $value;
+        $this->storage[$key] = $value;
         return true;
     }
 
@@ -29,7 +29,7 @@ class ExpoFileDriver
      */
     public function retrieve(string $key)
     {
-        return $storage[$key];
+        return $this->storage[$key];
     }
 
     /**
@@ -42,7 +42,7 @@ class ExpoFileDriver
      */
     public function forget(string $key, string $value = null)
     {
-        $storage[$key] = $value;
+        $this->storage[$key] = $value;
         return true;
     }
 
